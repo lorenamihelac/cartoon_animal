@@ -1,22 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AR Simulation - Animal on Bicycle</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div id="app">
-    <div class="ui-card">
-      <h1>AR Simulation: Animal Riding a Bicycle</h1>
-      <p>
-        Drag to rotate the scene. Scroll to zoom. Click the bicycle frame or wheels to change the bicycle color.
-      </p>
-      <button id="colorButton">Change Bicycle Color</button>
-    </div>
-  </div>
+<html>
+  <head>
+    <title>AR Cartoon Animal on Bicycle</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <a-scene cursor="rayOrigin: mouse" raycaster="objects: .clickable">
+      <!-- Assets -->
+      <a-assets>
+        <!-- Replace with your actual .glb file path -->
+        <a-asset-item id="animal-bike" src="assets/animal_on_bike.glb"></a-asset-item>
+      </a-assets>
 
-  <script type="module" src="script.js"></script>
-</body>
+      <!-- Camera with Zoom Controls -->
+      <a-entity camera look-controls wasd-controls position="0 1.6 3">
+        <a-cursor></a-cursor>
+      </a-entity>
+
+      <!-- 3D Model -->
+      <a-entity id="bikeModel" 
+                gltf-model="#animal-bike" 
+                position="0 0 -2" 
+                scale="1 1 1" 
+                class="clickable" 
+                animation-mixer>
+      </a-entity>
+
+      <!-- Road Background -->
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="100" color="#333">
+        <!-- Optional: Add white road lines -->
+        <a-plane position="0 0.01 0" width="0.2" height="100" color="#FFF"></a-plane>
+      </a-plane>
+
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
+
+    <script src="script.js"></script>
+  </body>
 </html>
