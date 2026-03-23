@@ -7,34 +7,54 @@
   </head>
   <body>
     <a-scene cursor="rayOrigin: mouse" raycaster="objects: .clickable">
-      <!-- Assets -->
-      <a-assets>
-        <!-- Replace with your actual .glb file path -->
-        <a-asset-item id="animal-bike" src="assets/animal_on_bike.glb"></a-asset-item>
-      </a-assets>
 
-      <!-- Camera with Zoom Controls -->
-      <a-entity camera look-controls wasd-controls position="0 1.6 3">
-        <a-cursor></a-cursor>
-      </a-entity>
+  <a-assets>
+    <a-asset-item id="animal-bike" src="assets/animal_on_bike.glb"></a-asset-item>
+  </a-assets>
 
-      <!-- 3D Model -->
-      <a-entity id="bikeModel" 
-                gltf-model="#animal-bike" 
-                position="0 0 -2" 
-                scale="1 1 1" 
-                class="clickable" 
-                animation-mixer>
-      </a-entity>
+  <!-- Kamera -->
+  <a-entity id="cameraRig" position="0 1.6 4">
+    <a-camera wasd-controls-enabled="false"></a-camera>
+  </a-entity>
 
-      <!-- Road Background -->
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="100" color="#333">
-        <!-- Optional: Add white road lines -->
-        <a-plane position="0 0.01 0" width="0.2" height="100" color="#FFF"></a-plane>
-      </a-plane>
+  <!-- MODEL -->
+  <a-entity id="bikeModel"
+            gltf-model="#animal-bike"
+            position="0 0 -3"
+            scale="1 1 1"
+            class="clickable"
+            animation-mixer>
+  </a-entity>
 
-      <a-sky color="#ECECEC"></a-sky>
-    </a-scene>
+  <!-- LEPŠA CESTA -->
+  <a-plane position="0 0 -4" rotation="-90 0 0"
+           width="10" height="100"
+           color="#c2b280">
+    
+    <!-- sredinska črta -->
+    <a-plane position="0 0.01 0" width="0.2" height="100" color="#ffffff"></a-plane>
+  </a-plane>
+
+  <!-- TRAVA -->
+  <a-plane position="0 -0.01 -4" rotation="-90 0 0"
+           width="30" height="100"
+           color="#7ec850">
+  </a-plane>
+
+  <!-- SONCE -->
+  <a-sphere position="-5 8 -10" radius="1.5" color="#FFD700"></a-sphere>
+
+  <!-- OBLAKI -->
+  <a-entity position="0 6 -10">
+    <a-sphere radius="1" color="#fff"></a-sphere>
+    <a-sphere position="1 0 0" radius="1.2" color="#fff"></a-sphere>
+    <a-sphere position="-1 0 0" radius="1" color="#fff"></a-sphere>
+  </a-entity>
+
+  <!-- NEBO -->
+  <a-sky color="#87CEEB"></a-sky>
+
+</a-scene>
 
     <script src="script.js"></script>
   </body>
