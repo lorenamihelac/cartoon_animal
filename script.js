@@ -1,5 +1,7 @@
 window.addEventListener('load', () => {
 
+  const soundDing = document.querySelector('#soundDing');
+  const soundWin = document.querySelector('#soundWin');
   const bike = document.querySelector('#bikeModel');
   const scoreText = document.querySelector('#scoreText');
 
