@@ -1,80 +1,79 @@
-window.addEventListener('load', () => {
+// ČIST, KOMPLETNI SCRIPT.JS
 
-  const soundDing = document.querySelector('#soundDing');
-  const soundWin = document.querySelector('#soundWin');
-  const bike = document.querySelector('#bikeModel');
-  const scoreText = document.querySelector('#scoreText');
-
-  let positionX = 0;
+document.addEventListener('DOMContentLoaded', () => {
+  // ======== GAME STATE ========
   let score = 0;
   let gameStarted = false;
 
-  //  PREMIKANJE + START + RESET
-  window.addEventListener('keydown', (e) => {
+  // Zvok ob kliku / točki
+  const dingSound = new Audio('https://cdn.aframe.io/basic-guide/audio/click.ogg');
 
-    if (e.key === 'ArrowLeft') {
-      positionX -= 0.5;
-      gameStarted = true;
-    }
+  // Barve kocke
+  const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF'];
+  let colorIndex = 0;
 
-    if (e.key === 'ArrowRight') {
-      positionX += 0.5;
-      gameStarted = true;
-    }
+  // Kocka
+  const cube = document.querySelector('#bikeModel');
 
-    //  RESET
-    if (e.key === 'r') {
-      score = 0;
-      positionX = 0;
-      gameStarted = false;
+  // ======== SCORE DISPLAY ========
+  const scoreDisplay = document.createElement('div');
+  scoreDisplay.style.position = 'absolute';
+  scoreDisplay.style.top = '10px';
+  scoreDisplay.style.right = '10px';
+  scoreDisplay.style.color = 'black';
+  scoreDisplay.style.fontSize = '24px';
+  scoreDisplay.style.fontWeight = 'bold';
+  scoreDisplay.innerText = "TOČKE: 0";
+  document.body.appendChild(scoreDisplay);
 
-      bike.setAttribute('position', '0 1 -3');
-      scoreText.setAttribute('value', 'Točke: 0');
+  // ======== START GAME OB KLIKU KOCKE ========
+  cube.addEventListener('click', () => {
+    if (!gameStarted) gameStarted = true;
 
-      console.log("RESET!");
-    }
+    // Menjava barve kocke
+    const nextColor = colors[colorIndex % colors.length];
+    colorIndex++;
+    cube.setAttribute('color', nextColor);
 
-    bike.setAttribute('position', `${positionX} 1 -3`);
+    // Zvok
+    dingSound.currentTime = 0;
+    dingSound.play();
   });
 
-  //  KLIK → MENJAVA BARVE
-  const colors = ['red', 'green', 'blue', 'yellow', 'purple'];
-  let index = 0;
+  // ======== PREMIKANJE KOCKE S KURZORJEM ========
+  let mouseX = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 4; // obseg -2 do 2
+    cube.setAttribute('position', { x: mouseX, y: 1, z: -3 });
+  });
 
-  bike.addEventListener('click', () => {
-  bike.setAttribute('color', colors[index % colors.length]);
-  index++;
-});
-
-  //  TOČKE (vsako sekundo)
+  // ======== TOČKE ========
   setInterval(() => {
+    if (gameStarted) {
+      const pos = cube.getAttribute('position');
+      if (Math.abs(pos.x) < 0.5) {
+        score++;
+        scoreDisplay.innerText = "TOČKE: " + score;
 
-  if (gameStarted && Math.abs(positionX) < 0.5) {
+        // Zvok za točko
+        dingSound.currentTime = 0;
+        dingSound.play();
 
-    score++;
-
-    scoreText.setAttribute('value', 'Točke: ' + score);
-
-    //  zvok za točko
-    soundDing.components.sound.playSound();
-
-    //  ZMAGA
-    if (score >= 20) {
-
-      soundWin.components.sound.playSound();
-
-      scoreText.setAttribute('value', 'ZMAGA! 🎉');
-
-      gameStarted = false;
-
-      setTimeout(() => {
-        score = 0;
-        positionX = 0;
-
-        bike.setAttribute('position', '0 1 -3');
-        scoreText.setAttribute('value', 'Točke: 0');
-      }, 3000);
+        // Cilj 20 točk
+        if (score >= 20) {
+          alert("Čestitke! Dosegel si 20 točk!");
+          score = 0;
+          scoreDisplay.innerText = "TOČKE: 0";
+        }
+      }
     }
-  }
+  }, 1000);
 
-}, 1000);
+  // ======== RESET TOČK OB R ========
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'r' || e.key === 'R') {
+      score = 0;
+      scoreDisplay.innerText = "TOČKE: 0";
+    }
+  });
+});
