@@ -9,6 +9,9 @@ setInterval(() => {
   if (Math.abs(positionX) < 0.5) {
     score++;
     console.log("TOČKE:", score);
+
+    // POSODOBI TEKST NA ZASLONU
+    scoreText.setAttribute('value', 'Točke: ' + score);
   }
 }, 1000);
 
