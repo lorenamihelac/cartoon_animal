@@ -48,10 +48,33 @@ window.addEventListener('load', () => {
 
   //  TOČKE (vsako sekundo)
   setInterval(() => {
-    if (gameStarted && Math.abs(positionX) < 0.5) {
-      score++;
-      scoreText.setAttribute('value', 'Točke: ' + score);
-    }
-  }, 1000);
 
-});
+  if (gameStarted && Math.abs(positionX) < 0.5) {
+
+    score++;
+
+    scoreText.setAttribute('value', 'Točke: ' + score);
+
+    //  zvok za točko
+    soundDing.components.sound.playSound();
+
+    //  ZMAGA
+    if (score >= 20) {
+
+      soundWin.components.sound.playSound();
+
+      scoreText.setAttribute('value', 'ZMAGA! 🎉');
+
+      gameStarted = false;
+
+      setTimeout(() => {
+        score = 0;
+        positionX = 0;
+
+        bike.setAttribute('position', '0 1 -3');
+        scoreText.setAttribute('value', 'Točke: 0');
+      }, 3000);
+    }
+  }
+
+}, 1000);
