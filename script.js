@@ -1,66 +1,79 @@
-// ---------- GLOBALNE SPREMENLJIVKE ----------
-let score = 0;
-let gameStarted = false;
-let audioAllowed = false;
+// ČIST, KOMPLETNI SCRIPT.JS
 
-// Zvok za točko
-const dingSound = new Audio('https://www.soundjay.com/button/beep-07.wav'); // uporabi svoj zvok ali online
+document.addEventListener('DOMContentLoaded', () => {
+  // ======== GAME STATE ========
+  let score = 0;
+  let gameStarted = false;
 
-// Za premikanje kocke
-const cube = document.querySelector('#bikeModel');
+  // Zvok ob kliku / točki
+  const dingSound = new Audio('https://cdn.aframe.io/basic-guide/audio/click.ogg');
 
-// Element za prikaz točk
-const scoreDisplay = document.createElement('div');
-scoreDisplay.style.position = 'absolute';
-scoreDisplay.style.top = '10px';
-scoreDisplay.style.left = '10px';
-scoreDisplay.style.padding = '8px 12px';
-scoreDisplay.style.background = 'rgba(255,255,255,0.8)';
-scoreDisplay.style.fontSize = '18px';
-scoreDisplay.style.fontFamily = 'sans-serif';
-scoreDisplay.style.borderRadius = '8px';
-scoreDisplay.innerText = "TOČKE: 0";
-document.body.appendChild(scoreDisplay);
+  // Barve kocke
+  const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF'];
+  let colorIndex = 0;
 
-// ---------- DOVOLITEV ZVOKA ----------
-document.addEventListener('click', () => {
-  audioAllowed = true;
-  gameStarted = true; // igra se začne ob prvem kliku
-});
+  // Kocka
+  const cube = document.querySelector('#bikeModel');
 
-// ---------- PREMIKANJE KOCKE ----------
-let moveX = 0;
-document.addEventListener('mousemove', (event) => {
-  const width = window.innerWidth;
-  const normalized = (event.clientX / width) * 2 - 1; // -1 do 1
-  moveX = normalized * 2; // omejitev gibanja
-  cube.setAttribute('position', { x: moveX, y: 1, z: -3 });
-});
-
-// ---------- RESET TOČK OB NOVI IGRI ----------
-function resetScore() {
-  score = 0;
+  // ======== SCORE DISPLAY ========
+  const scoreDisplay = document.createElement('div');
+  scoreDisplay.style.position = 'absolute';
+  scoreDisplay.style.top = '10px';
+  scoreDisplay.style.right = '10px';
+  scoreDisplay.style.color = 'black';
+  scoreDisplay.style.fontSize = '24px';
+  scoreDisplay.style.fontWeight = 'bold';
   scoreDisplay.innerText = "TOČKE: 0";
-}
+  document.body.appendChild(scoreDisplay);
 
-// ---------- TOČKE ----------
-setInterval(() => {
-  if (gameStarted) {
-    const pos = cube.getAttribute('position');
-    // če je kocka približno na sredini
-    if (Math.abs(pos.x) < 0.5) {
-      score++;
-      scoreDisplay.innerText = "TOČKE: " + score;
+  // ======== START GAME OB KLIKU KOCKE ========
+  cube.addEventListener('click', () => {
+    if (!gameStarted) gameStarted = true;
 
-      if (audioAllowed) {
+    // Menjava barve kocke
+    const nextColor = colors[colorIndex % colors.length];
+    colorIndex++;
+    cube.setAttribute('color', nextColor);
+
+    // Zvok
+    dingSound.currentTime = 0;
+    dingSound.play();
+  });
+
+  // ======== PREMIKANJE KOCKE S KURZORJEM ========
+  let mouseX = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 4; // obseg -2 do 2
+    cube.setAttribute('position', { x: mouseX, y: 1, z: -3 });
+  });
+
+  // ======== TOČKE ========
+  setInterval(() => {
+    if (gameStarted) {
+      const pos = cube.getAttribute('position');
+      if (Math.abs(pos.x) < 0.5) {
+        score++;
+        scoreDisplay.innerText = "TOČKE: " + score;
+
+        // Zvok za točko
         dingSound.currentTime = 0;
         dingSound.play();
-      }
 
-      if (score >= 20) {
-        alert("Čestitke! Dosegel si 20 točk!");
-        resetScore();
+        // Cilj 20 točk
+        if (score >= 20) {
+          alert("Čestitke! Dosegel si 20 točk!");
+          score = 0;
+          scoreDisplay.innerText = "TOČKE: 0";
+        }
       }
     }
-  }
-}, 1000);
+  }, 1000);
+
+  // ======== RESET TOČK OB R ========
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'r' || e.key === 'R') {
+      score = 0;
+      scoreDisplay.innerText = "TOČKE: 0";
+    }
+  });
+});
