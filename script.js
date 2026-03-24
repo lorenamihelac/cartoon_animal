@@ -15,7 +15,7 @@ setInterval(() => {
   }
 }, 1000);
 
-  // ⬅️➡️ premikanje
+  //  premikanje
   window.addEventListener('keydown', (e) => {
 
     if (e.key === 'ArrowLeft') {
@@ -30,7 +30,21 @@ setInterval(() => {
     bike.setAttribute('position', `${positionX} 1 -3`);
   });
 
-  // 🎨 klik → menjava barve
+  // 🔄 RESET (DODAJ TO)
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'r') {
+
+    score = 0;
+    positionX = 0;
+
+    bike.setAttribute('position', '0 1 -3');
+    scoreText.setAttribute('value', 'Točke: 0');
+
+    console.log("RESET!");
+  }
+});
+
+  //  klik → menjava barve
   const colors = ['red', 'green', 'blue', 'yellow', 'purple'];
   let colorIndex = 0;
 
