@@ -3,6 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const bike = document.querySelector('#bikeModel');
 
   let positionX = 0;
+  let score = 0;
+
+setInterval(() => {
+  if (Math.abs(positionX) < 0.5) {
+    score++;
+    console.log("TOČKE:", score);
+  }
+}, 1000);
 
   // ⬅️➡️ premikanje
   window.addEventListener('keydown', (e) => {
