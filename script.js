@@ -42,9 +42,12 @@ window.addEventListener('load', () => {
   let index = 0;
 
   bike.addEventListener('click', () => {
-    bike.setAttribute('color', colors[index % colors.length]);
-    index++;
-  });
+
+  gameStarted = true; // 
+
+  bike.setAttribute('color', colors[index % colors.length]);
+  index++;
+});
 
   //  TOČKE (vsako sekundo)
   setInterval(() => {
